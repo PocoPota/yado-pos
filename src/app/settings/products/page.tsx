@@ -22,6 +22,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../lib/firebase";
+import VerifiedOnlyComponent from "@/app/components/VerifiedOnlyComponent";
 
 const { Title } = Typography;
 
@@ -158,41 +159,42 @@ export default function ProductSettingsPage() {
   ];
 
   return (
-    <main>
-      <Title level={2}>商品管理</Title>
-
-      <Form
-        form={form}
-        layout="inline"
-        onFinish={onCreate}
-        style={{ marginBottom: 24 }}
-      >
-        <Form.Item
-          name="name"
-          rules={[{ required: true, message: "商品名を入力してください" }]}
+    <VerifiedOnlyComponent>
+      <main>
+        <Title level={2}>商品管理</Title>
+        <Form
+          form={form}
+          layout="inline"
+          onFinish={onCreate}
+          style={{ marginBottom: 24 }}
         >
-          <Input placeholder="商品名" />
-        </Form.Item>
-        <Form.Item
-          name="price"
-          rules={[{ required: true, message: "価格を入力してください" }]}
-        >
-          <InputNumber placeholder="価格" min={0} />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            追加
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item
+            name="name"
+            rules={[{ required: true, message: "商品名を入力してください" }]}
+          >
+            <Input placeholder="商品名" />
+          </Form.Item>
+          <Form.Item
+            name="price"
+            rules={[{ required: true, message: "価格を入力してください" }]}
+          >
+            <InputNumber placeholder="価格" min={0} />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              追加
+            </Button>
+          </Form.Item>
+        </Form>
 
-      <Table
-        columns={columns}
-        dataSource={products}
-        rowKey="id"
-        loading={loading}
-        pagination={false}
-      />
-    </main>
+        <Table
+          columns={columns}
+          dataSource={products}
+          rowKey="id"
+          loading={loading}
+          pagination={false}
+        />
+      </main>
+    </VerifiedOnlyComponent>
   );
 }

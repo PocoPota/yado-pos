@@ -1,7 +1,14 @@
-export default function Settings(){
+import VerifiedOnlyComponent from "../components/VerifiedOnlyComponent";
+
+export default function Settings() {
   return (
-    <main>
-      <ul><a href="/settings/products">商品設定</a></ul>
-    </main>
-  )
+    <VerifiedOnlyComponent>
+      <main>
+        <ul>
+          <li><a href="/settings/products">商品設定</a></li>
+          <li><a href="/settings/user">ユーザー設定</a></li>
+        </ul>
+      </main>
+    </VerifiedOnlyComponent>
+  );
 }
