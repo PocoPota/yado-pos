@@ -11,7 +11,9 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
-        <div className={styles.logo}>YadoPOS</div>
+        <div className={styles.logo}>
+          <a href="/">YadoPOS</a>
+          </div>
         <div className={styles.account}>
           {!loading && !user &&(
             <LoginButton/>
