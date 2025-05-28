@@ -19,7 +19,7 @@ export default function Header() {
             <LoginButton/>
           )}
           {!loading && user &&(
-            <div>ログイン済み</div>
+            <div>{user.displayName}</div>
           )}
         </div>
       </div>
