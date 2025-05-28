@@ -17,7 +17,7 @@ type Sale = {
   id: string;
   createdAt: any;
   items: Item[];
-  totalAmount: number;
+  total: number;
 };
 
 export default function Dashboard() {
@@ -32,7 +32,7 @@ export default function Dashboard() {
           id: doc.id,
           createdAt: d.createdAt?.toDate(), // FirestoreのTimestamp → Date
           items: d.items || [],
-          totalAmount: d.totalAmount || 0,
+          total: d.total || 0,
         };
       });
       setSales(data);
@@ -57,8 +57,8 @@ export default function Dashboard() {
     },
     {
       title: "合計金額",
-      dataIndex: "totalAmount",
-      key: "totalAmount",
+      dataIndex: "total",
+      key: "total",
       render: (amount: number) => `${amount.toLocaleString()}円`,
     },
   ];
