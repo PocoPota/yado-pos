@@ -1,9 +1,15 @@
+import Dashboard from "./components/Dashbord";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <main>
-      Hello YadoSai!
+      <section>
+        <ul>
+          <li><a href="/checkout">会計</a></li>
+          <li><a href="/settings">設定</a></li>
+        </ul>
+      </section>
     </main>
   );
 }
