@@ -1,7 +1,8 @@
 import { Button } from "antd";
 import VerifiedOnlyComponent from "./components/VerifiedOnlyComponent";
 import styles from "./page.module.scss";
-import Dashboard from "./components/Record";
+import Dashboard from "./components/Dashboard";
+import Record from "./components/Record";
 
 export default function Home() {
   return (
@@ -13,6 +14,9 @@ export default function Home() {
         </section>
         <section>
           <Dashboard/>
+        </section>
+        <section>
+          <Record/>
         </section>
       </main>
     </VerifiedOnlyComponent>
