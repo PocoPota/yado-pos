@@ -1,0 +1,27 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  .card {
+    width: 250px;
+    .name {
+      font-size: 20px;
+    }
+    .price {
+      font-size: 18px;
+    }
+    .buttons {
+      margin-top: 5px;
+      .count {
+        font-size: 25px;
+        margin: 0 7px;
+      }
+    }
+  }
+}
+.total {
+  font-size: 24px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}

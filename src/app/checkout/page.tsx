@@ -5,6 +5,7 @@ import { Button, Card, Modal, Spin, message } from "antd";
 import { collection, getDocs, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import VerifiedOnlyComponent from "../components/VerifiedOnlyComponent";
+import styles from "./page.module.scss";
 
 type Product = {
   id: string;
@@ -82,7 +83,7 @@ export default function CheckoutPage() {
   if (loading) {
     return (
       <main>
-        <Spin className="spin" size="large" />
+        <Spin className="spin" size="large"></Spin>
       </main>
     );
   }
@@ -90,26 +91,38 @@ export default function CheckoutPage() {
   return (
     <VerifiedOnlyComponent>
       <main className="p-4 space-y-4">
-        {products.map((product) => (
-          <Card key={product.id}>
-            <div className="flex justify-between items-center">
-              <div>
-                <div>{product.name}</div>
-                <div>¥{product.price}</div>
+        <div className={styles.cards}>
+          {products.map((product) => (
+            <Card key={product.id} className={styles.card}>
+              <div className="flex justify-between items-center">
+                <div>
+                  <div className={styles.name}>{product.name}</div>
+                  <div className={styles.price}>¥{product.price}</div>
+                </div>
+                <div className={styles.buttons}>
+                  <Button
+                    color="primary"
+                    variant="solid"
+                    onClick={() => handleQuantityChange(product.id, -1)}
+                  >
+                    -
+                  </Button>
+                  <span className={styles.count}>
+                    {quantities[product.id] || 0}
+                  </span>
+                  <Button
+                    color="danger"
+                    variant="solid"
+                    onClick={() => handleQuantityChange(product.id, 1)}
+                  >
+                    +
+                  </Button>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Button onClick={() => handleQuantityChange(product.id, -1)}>
-                  -
-                </Button>
-                <span>{quantities[product.id] || 0}</span>
-                <Button onClick={() => handleQuantityChange(product.id, 1)}>
-                  +
-                </Button>
-              </div>
-            </div>
-          </Card>
-        ))}
-        <div className="text-right text-xl font-bold">合計: ¥{total}</div>
+            </Card>
+          ))}
+        </div>
+        <div className={styles.total}>合計: ¥{total}</div>
         <Button
           type="primary"
           className="w-full"
