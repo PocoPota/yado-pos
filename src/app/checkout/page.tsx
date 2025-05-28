@@ -83,7 +83,7 @@ export default function CheckoutPage() {
   if (loading) {
     return (
       <main>
-        <Spin className="spin" size="large"></Spin>
+        <Spin className="spin">読み込み中...</Spin>
       </main>
     );
   }
