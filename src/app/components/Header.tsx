@@ -1,13 +1,24 @@
-import { Button } from "antd";
+"use client"
+
 import styles from "./Header.module.scss";
+import LoginButton from "./LoginButton";
+
+import { useAuth } from "../context/AuthContext";
 
 export default function Header() {
+  const {user, loading} = useAuth();
+
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
         <div className={styles.logo}>YadoPOS</div>
-        <div>
-          <Button>Googleでログイン</Button>
+        <div className={styles.account}>
+          {!loading && !user &&(
+            <LoginButton/>
+          )}
+          {!loading && user &&(
+            <div>ログイン済み</div>
+          )}
         </div>
       </div>
     </header>
