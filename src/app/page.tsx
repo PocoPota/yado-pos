@@ -1,4 +1,3 @@
-import Dashboard from "./components/Dashbord";
 import styles from "./page.module.css";
 
 export default function Home() {
