@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { db } from "../lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, getDocs, orderBy } from "firebase/firestore";
 import { Table, Card } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
@@ -25,8 +25,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchSales = async () => {
-      const snapshot = await getDocs(collection(db, "sales"));
-      const data = snapshot.docs.map(doc => {
+      const salesRef = collection(db, "sales");
+      const q = query(salesRef, orderBy("createdAt", "desc")); // "asc" にすると昇順
+      const snapshot = await getDocs(q);      const data = snapshot.docs.map(doc => {
         const d = doc.data();
         return {
           id: doc.id,
