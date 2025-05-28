@@ -47,7 +47,7 @@ export default function VerifiedOnlyComponent({
   if (isVerified === null) {
     return (
       <main>
-        <Spin className="spin" tip="読み込み中...">読み込み中...</Spin>
+        <Spin className="spin">読み込み中...</Spin>
       </main>
     );
   }
