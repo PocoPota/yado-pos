@@ -8,18 +8,3 @@
   font-style: normal;
   vertical-align: bottom;
 }
-
-// 変数
-:root {
-  --c-primary: #fe8fc6;
-  --c-black: black;
-  --c-white: white;
-  --c-gray: #808080;
-
-  --s-width: 800px;
-}
-
-main {
-  width: var(--s-width);
-  margin: 0 auto;
-}
