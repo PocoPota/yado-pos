@@ -81,9 +81,9 @@ export default function CheckoutPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <Spin size="large" />
-      </div>
+      <main>
+        <Spin className="spin" size="large" />
+      </main>
     );
   }
 

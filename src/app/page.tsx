@@ -1,19 +1,14 @@
+import { Button } from "antd";
 import VerifiedOnlyComponent from "./components/VerifiedOnlyComponent";
-import styles from "./page.module.css";
+import styles from "./page.module.scss";
 
 export default function Home() {
   return (
     <VerifiedOnlyComponent>
       <main>
-        <section>
-          <ul>
-            <li>
-              <a href="/checkout">会計</a>
-            </li>
-            <li>
-              <a href="/settings">設定</a>
-            </li>
-          </ul>
+        <section className={styles.links}>
+          <Button href="/checkout">会計 →</Button>
+          <Button href="/settings">設定 →</Button>
         </section>
       </main>
     </VerifiedOnlyComponent>
