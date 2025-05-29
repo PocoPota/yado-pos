@@ -135,7 +135,6 @@ export default function ReturnsPage() {
                 min={0}
                 max={item.quantity}
                 value={returnQuantities[item.productId]}
-                // value={item.quantity}
                 onChange={(value) => handleQuantityChange(item.productId, value)}
               />
             </Card>

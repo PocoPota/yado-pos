@@ -96,7 +96,7 @@ export default function CheckoutPage() {
         <div className={styles.cards}>
           {products.map((product) => (
             <Card key={product.id} className={styles.card}>
-              <div className="flex justify-between items-center">
+              <div>
                 <div>
                   <div className={styles.name}>{product.name}</div>
                   <div className={styles.price}>¥{product.price}</div>
