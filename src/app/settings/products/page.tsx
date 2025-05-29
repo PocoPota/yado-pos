@@ -30,6 +30,7 @@ type Product = {
   id: string;
   name: string;
   price: number;
+  order: number;
 };
 
 export default function ProductSettingsPage() {
@@ -38,7 +39,6 @@ export default function ProductSettingsPage() {
   const [form] = Form.useForm();
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Firestoreから商品取得
   const fetchProducts = async () => {
     setLoading(true);
     const querySnapshot = await getDocs(collection(db, "products"));
@@ -54,11 +54,12 @@ export default function ProductSettingsPage() {
     fetchProducts();
   }, []);
 
-  // 登録処理
   const onCreate = async (values: { name: string; price: number }) => {
     try {
+      const maxOrder = products.reduce((max, p) => Math.max(max, p.order ?? 0), 0);
       await addDoc(collection(db, "products"), {
         ...values,
+        order: maxOrder + 1,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -70,12 +71,12 @@ export default function ProductSettingsPage() {
     }
   };
 
-  // 編集処理
-  const onSave = async (id: string, name: string, price: number) => {
+  const onSave = async (id: string, name: string, price: number, order: number) => {
     try {
       await updateDoc(doc(db, "products", id), {
         name,
         price,
+        order,
         updatedAt: serverTimestamp(),
       });
       message.success("商品を更新しました");
@@ -86,7 +87,6 @@ export default function ProductSettingsPage() {
     }
   };
 
-  // 削除処理
   const onDelete = async (id: string) => {
     try {
       await deleteDoc(doc(db, "products", id));
@@ -126,13 +126,27 @@ export default function ProductSettingsPage() {
         ),
     },
     {
+      title: "順序",
+      dataIndex: "order",
+      render: (_: any, record: Product) =>
+        editingId === record.id ? (
+          <InputNumber
+            min={0}
+            defaultValue={record.order}
+            onChange={(val) => (record.order = val ?? 0)}
+          />
+        ) : (
+          record.order
+        ),
+    },
+    {
       title: "操作",
       render: (_: any, record: Product) =>
         editingId === record.id ? (
           <Space>
             <Button
               type="link"
-              onClick={() => onSave(record.id, record.name, record.price)}
+              onClick={() => onSave(record.id, record.name, record.price, record.order)}
             >
               保存
             </Button>
