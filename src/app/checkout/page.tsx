@@ -6,6 +6,7 @@ import { collection, getDocs, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import VerifiedOnlyComponent from "../components/VerifiedOnlyComponent";
 import styles from "./page.module.scss";
+import { getAuth } from "firebase/auth";
 
 const { Title } = Typography;
 
@@ -58,6 +59,14 @@ export default function CheckoutPage() {
   );
 
   const handleCheckout = async () => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+  
+    if (!currentUser) {
+      message.error("ユーザー情報が取得できません。ログインし直してください。");
+      return;
+    }
+  
     const items = products
       .filter((p) => quantities[p.id])
       .map((p) => ({
@@ -67,24 +76,25 @@ export default function CheckoutPage() {
         quantity: quantities[p.id],
         subtotal: p.price * quantities[p.id],
       }));
-
+  
     try {
       await addDoc(collection(db, "sales"), {
         items,
         total,
         createdAt: Timestamp.now(),
         type: "sale",
+        uid: currentUser.uid,
       });
 
-      setLastSaleItems(items); // モーダルで表示するため保存
-      setIsModalVisible(true); // モーダルを表示
-      setLastTotal(total); // モーダル用合計金額
+      setLastSaleItems(items);
+      setIsModalVisible(true);
+      setLastTotal(total);
       setQuantities({});
     } catch (error) {
       message.error("会計処理に失敗しました");
     }
   };
-
+  
   if (loading) {
     return (
       <main>

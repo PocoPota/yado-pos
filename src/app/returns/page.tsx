@@ -11,6 +11,7 @@ import {
   where,
   orderBy,
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { Card, Button, message, Typography } from "antd";
 
 const { Title } = Typography;
@@ -72,6 +73,14 @@ export default function ReturnsPage() {
   const handleReturn = async () => {
     if (!selectedSale) return;
 
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+      message.error("ユーザー情報が取得できません。ログインし直してください。");
+      return;
+    }
+
     const returnItems = selectedSale.items.map((item) => ({
       ...item,
       quantity: -item.quantity,
@@ -83,6 +92,7 @@ export default function ReturnsPage() {
       total: -selectedSale.total,
       createdAt: Timestamp.now(),
       returnedFrom: selectedSale.id,
+      uid: currentUser.uid,
     });
 
     message.success("返品を記録しました");
