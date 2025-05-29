@@ -18,3 +18,12 @@
     }
   }
 }
+
+@media (width <= 800px){
+  .header{
+    width: 100%;
+    .headerInner{
+      width: 85%;
+    }
+  }
+}
