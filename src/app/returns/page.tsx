@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { Card, Button, InputNumber, message, Typography } from "antd";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 type Item = {
   productId: string;
@@ -41,7 +41,8 @@ export default function ReturnsPage() {
       // 1. 通常の売上データを取得
       const saleQuery = query(
         collection(db, "sales"),
-        where("type", "==", "sale")
+        where("type", "==", "sale"),
+        orderBy("createdAt", "desc")
       );
       const saleSnap = await getDocs(saleQuery);
       const saleData = saleSnap.docs.map((doc) => ({
