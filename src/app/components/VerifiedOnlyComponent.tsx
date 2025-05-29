@@ -9,7 +9,7 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../lib/firebase"; // Firestore インスタンス
 import { Spin } from "antd";
-import styles from "./VerifiedOnlyComponent.module.scss"
+import styles from "./VerifiedOnlyComponent.module.scss";
 
 export default function VerifiedOnlyComponent({
   children,

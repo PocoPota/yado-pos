@@ -9,7 +9,7 @@ import {
   Timestamp,
   query,
   where,
-  orderBy
+  orderBy,
 } from "firebase/firestore";
 import { Card, Button, InputNumber, message, Typography } from "antd";
 
@@ -32,29 +32,41 @@ type Sale = {
 export default function ReturnsPage() {
   const [sales, setSales] = useState<Sale[]>([]);
   const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
-  const [returnQuantities, setReturnQuantities] = useState<{ [id: string]: number }>({});
+  const [returnQuantities, setReturnQuantities] = useState<{
+    [id: string]: number;
+  }>({});
 
   useEffect(() => {
     const fetchSales = async () => {
       // 1. 通常の売上データを取得
-      const saleQuery = query(collection(db, "sales"), where("type", "==", "sale"));
+      const saleQuery = query(
+        collection(db, "sales"),
+        where("type", "==", "sale")
+      );
       const saleSnap = await getDocs(saleQuery);
       const saleData = saleSnap.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as Sale[];
-  
+
       // 2. 返品記録を取得（returnedFrom を参照）
-      const returnQuery = query(collection(db, "sales"), where("type", "==", "return"));
+      const returnQuery = query(
+        collection(db, "sales"),
+        where("type", "==", "return")
+      );
       const returnSnap = await getDocs(returnQuery);
-      const returnedIds = new Set(returnSnap.docs.map((doc) => doc.data().returnedFrom));
-  
+      const returnedIds = new Set(
+        returnSnap.docs.map((doc) => doc.data().returnedFrom)
+      );
+
       // 3. すでに返品された sale.id を除外
-      const unreturnedSales = saleData.filter((sale) => !returnedIds.has(sale.id));
-  
+      const unreturnedSales = saleData.filter(
+        (sale) => !returnedIds.has(sale.id)
+      );
+
       setSales(unreturnedSales);
     };
-  
+
     fetchSales();
   }, []);
 
@@ -80,9 +92,7 @@ export default function ReturnsPage() {
     const returnItems = selectedSale.items
       .map((item) => {
         const quantity = returnQuantities[item.productId];
-        return quantity > 0
-          ? { ...item, quantity: -quantity }
-          : null;
+        return quantity > 0 ? { ...item, quantity: -quantity } : null;
       })
       .filter(Boolean) as Item[];
 
@@ -119,7 +129,12 @@ export default function ReturnsPage() {
           {sales.map((sale) => (
             <Card key={sale.id} style={{ marginBottom: 16 }}>
               <p>日時: {sale.createdAt.toDate().toLocaleString()}</p>
-              <p>購入品目：{sale.items.map(item => `${item.name}×${item.quantity}`).join(", ")}</p>
+              <p>
+                購入品目：
+                {sale.items
+                  .map((item) => `${item.name}×${item.quantity}`)
+                  .join(", ")}
+              </p>
               <p>合計: ¥{sale.total}</p>
               <Button onClick={() => handleSelectSale(sale)}>返品する</Button>
             </Card>
@@ -130,17 +145,28 @@ export default function ReturnsPage() {
           <h2>商品ごとに返品数を指定</h2>
           {selectedSale.items.map((item) => (
             <Card key={item.productId} style={{ marginBottom: 12 }}>
-              <p>{item.name} ¥{item.price} × {item.quantity}</p>
+              <p>
+                {item.name} ¥{item.price} × {item.quantity}
+              </p>
               <InputNumber
                 min={0}
                 max={item.quantity}
                 value={returnQuantities[item.productId]}
-                onChange={(value) => handleQuantityChange(item.productId, value)}
+                onChange={(value) =>
+                  handleQuantityChange(item.productId, value)
+                }
               />
             </Card>
           ))}
-          <Button type="primary" onClick={handleReturn}>返品を記録する</Button>
-          <Button onClick={() => setSelectedSale(null)} style={{ marginLeft: 8 }}>戻る</Button>
+          <Button type="primary" onClick={handleReturn}>
+            返品を記録する
+          </Button>
+          <Button
+            onClick={() => setSelectedSale(null)}
+            style={{ marginLeft: 8 }}
+          >
+            戻る
+          </Button>
         </div>
       )}
     </main>
