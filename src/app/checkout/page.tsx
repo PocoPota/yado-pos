@@ -11,6 +11,7 @@ type Product = {
   id: string;
   name: string;
   price: number;
+  order: number;
 };
 
 export default function CheckoutPage() {
@@ -30,6 +31,7 @@ export default function CheckoutPage() {
           id: doc.id,
           ...(doc.data() as Omit<Product, "id">),
         }));
+        productsData.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
         setProducts(productsData);
       } catch (error) {
         message.error("商品データの取得に失敗しました");
