@@ -27,7 +27,8 @@ export default function Dashboard() {
     const fetchSales = async () => {
       const salesRef = collection(db, "sales");
       const q = query(salesRef, orderBy("createdAt", "desc")); // "asc" にすると昇順
-      const snapshot = await getDocs(q);      const data = snapshot.docs.map(doc => {
+      const snapshot = await getDocs(q);
+      const data = snapshot.docs.map((doc) => {
         const d = doc.data();
         return {
           id: doc.id,
@@ -54,7 +55,7 @@ export default function Dashboard() {
       dataIndex: "items",
       key: "items",
       render: (items: Item[]) =>
-        items.map(item => `${item.name}×${item.quantity}`).join(", "),
+        items.map((item) => `${item.name}×${item.quantity}`).join(", "),
     },
     {
       title: "合計金額",

@@ -56,7 +56,10 @@ export default function ProductSettingsPage() {
 
   const onCreate = async (values: { name: string; price: number }) => {
     try {
-      const maxOrder = products.reduce((max, p) => Math.max(max, p.order ?? 0), 0);
+      const maxOrder = products.reduce(
+        (max, p) => Math.max(max, p.order ?? 0),
+        0
+      );
       await addDoc(collection(db, "products"), {
         ...values,
         order: maxOrder + 1,
@@ -71,7 +74,12 @@ export default function ProductSettingsPage() {
     }
   };
 
-  const onSave = async (id: string, name: string, price: number, order: number) => {
+  const onSave = async (
+    id: string,
+    name: string,
+    price: number,
+    order: number
+  ) => {
     try {
       await updateDoc(doc(db, "products", id), {
         name,
@@ -146,7 +154,9 @@ export default function ProductSettingsPage() {
           <Space>
             <Button
               type="link"
-              onClick={() => onSave(record.id, record.name, record.price, record.order)}
+              onClick={() =>
+                onSave(record.id, record.name, record.price, record.order)
+              }
             >
               保存
             </Button>

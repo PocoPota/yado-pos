@@ -27,7 +27,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchSales = async () => {
       const snapshot = await getDocs(collection(db, "sales"));
-      const data: Sale[] = snapshot.docs.map(doc => ({
+      const data: Sale[] = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as Omit<Sale, "id">),
       }));
@@ -35,9 +35,9 @@ export default function Dashboard() {
 
       let units = 0;
       let revenue = 0;
-      data.forEach(sale => {
+      data.forEach((sale) => {
         revenue += sale.total;
-        sale.items.forEach(item => {
+        sale.items.forEach((item) => {
           units += item.quantity;
         });
       });

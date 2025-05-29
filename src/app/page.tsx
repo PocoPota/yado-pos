@@ -14,10 +14,10 @@ export default function Home() {
           <Button href="/settings">設定 →</Button>
         </section>
         <section>
-          <Dashboard/>
+          <Dashboard />
         </section>
         <section>
-          <Record/>
+          <Record />
         </section>
       </main>
     </VerifiedOnlyComponent>

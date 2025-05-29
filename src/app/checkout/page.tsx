@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Card, Modal, Spin, message } from "antd";
+import { Button, Card, Modal, Spin, message, Typography } from "antd";
 import { collection, getDocs, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import VerifiedOnlyComponent from "../components/VerifiedOnlyComponent";
 import styles from "./page.module.scss";
+
+const { Title } = Typography;
 
 type Product = {
   id: string;
@@ -93,10 +95,11 @@ export default function CheckoutPage() {
   return (
     <VerifiedOnlyComponent>
       <main className="p-4 space-y-4">
+        <Title level={2}>会計</Title>
         <div className={styles.cards}>
           {products.map((product) => (
             <Card key={product.id} className={styles.card}>
-              <div className="flex justify-between items-center">
+              <div>
                 <div>
                   <div className={styles.name}>{product.name}</div>
                   <div className={styles.price}>¥{product.price}</div>
