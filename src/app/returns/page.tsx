@@ -95,6 +95,14 @@ export default function ReturnsPage() {
       uid: currentUser.uid,
     });
 
+    await addDoc(collection(db, "pub_sales"), {
+      type: "return",
+      items: returnItems,
+      total: -selectedSale.total,
+      createdAt: Timestamp.now(),
+      returnedFrom: selectedSale.id,
+    });
+
     message.success("返品を記録しました");
     setSelectedSale(null);
     setSales((prev) => prev.filter((s) => s.id !== selectedSale.id));

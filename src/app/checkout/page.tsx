@@ -86,6 +86,13 @@ export default function CheckoutPage() {
         uid: currentUser.uid,
       });
 
+      await addDoc(collection(db, "pub_sales"), {
+        items,
+        total,
+        createdAt: Timestamp.now(),
+        type: "sale",
+      });
+
       setLastSaleItems(items);
       setIsModalVisible(true);
       setLastTotal(total);
