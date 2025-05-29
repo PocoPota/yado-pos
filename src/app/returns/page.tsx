@@ -121,11 +121,10 @@ export default function ReturnsPage() {
 
   return (
     <main>
-      <Title level={2}>修正・返品ページ</Title>
+      <Title level={2}>修正・返品</Title>
 
       {!selectedSale ? (
         <div>
-          <Text>修正・返品する商品を選択してください</Text>
           {sales.map((sale) => (
             <Card key={sale.id} style={{ marginBottom: 16 }}>
               <p>日時: {sale.createdAt.toDate().toLocaleString()}</p>
@@ -136,7 +135,7 @@ export default function ReturnsPage() {
                   .join(", ")}
               </p>
               <p>合計: ¥{sale.total}</p>
-              <Button onClick={() => handleSelectSale(sale)}>返品する</Button>
+              <Button onClick={() => handleSelectSale(sale)}>修正・返品処理</Button>
             </Card>
           ))}
         </div>
