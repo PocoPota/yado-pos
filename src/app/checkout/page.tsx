@@ -94,7 +94,7 @@ export default function CheckoutPage() {
 
   return (
     <VerifiedOnlyComponent>
-      <main className="p-4 space-y-4">
+      <main>
         <Title level={2} className={styles.title}>
           会計
         </Title>
