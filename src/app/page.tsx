@@ -10,6 +10,7 @@ export default function Home() {
       <main className={styles.home}>
         <section className={styles.links}>
           <Button href="/checkout">会計 →</Button>
+          <Button href="/returns">修正・返品 →</Button>
           <Button href="/settings">設定 →</Button>
         </section>
         <section>
