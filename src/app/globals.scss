@@ -13,3 +13,9 @@ main {
   width: 800px;
   margin: 30px auto 80px auto;
 }
+
+@media (width <= 800px){
+  main{
+    width: 95%;
+  }
+}

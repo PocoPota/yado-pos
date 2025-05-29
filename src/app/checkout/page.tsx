@@ -95,7 +95,9 @@ export default function CheckoutPage() {
   return (
     <VerifiedOnlyComponent>
       <main className="p-4 space-y-4">
-        <Title level={2}>会計</Title>
+        <Title level={2} className={styles.title}>
+          会計
+        </Title>
         <div className={styles.cards}>
           {products.map((product) => (
             <Card key={product.id} className={styles.card}>
@@ -127,15 +129,17 @@ export default function CheckoutPage() {
             </Card>
           ))}
         </div>
-        <div className={styles.total}>合計: ¥{total}</div>
-        <Button
-          type="primary"
-          className="w-full"
-          onClick={handleCheckout}
-          disabled={total === 0}
-        >
-          会計する
-        </Button>
+        <div className={styles.control}>
+          <div className={styles.total}>合計: ¥{total}</div>
+          <Button
+            type="primary"
+            className="w-full"
+            onClick={handleCheckout}
+            disabled={total === 0}
+          >
+            会計する
+          </Button>
+        </div>
         <Modal
           title="会計完了"
           open={isModalVisible}
