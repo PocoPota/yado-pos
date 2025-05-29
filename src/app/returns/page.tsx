@@ -11,9 +11,9 @@ import {
   where,
   orderBy,
 } from "firebase/firestore";
-import { Card, Button, InputNumber, message, Typography } from "antd";
+import { Card, Button, message, Typography } from "antd";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 type Item = {
   productId: string;
@@ -32,16 +32,13 @@ type Sale = {
 export default function ReturnsPage() {
   const [sales, setSales] = useState<Sale[]>([]);
   const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
-  const [returnQuantities, setReturnQuantities] = useState<{
-    [id: string]: number;
-  }>({});
 
   useEffect(() => {
     const fetchSales = async () => {
-      // 1. 通常の売上データを取得
       const saleQuery = query(
         collection(db, "sales"),
-        where("type", "==", "sale")
+        where("type", "==", "sale"),
+        orderBy("createdAt", "desc")
       );
       const saleSnap = await getDocs(saleQuery);
       const saleData = saleSnap.docs.map((doc) => ({
@@ -49,7 +46,6 @@ export default function ReturnsPage() {
         ...doc.data(),
       })) as Sale[];
 
-      // 2. 返品記録を取得（returnedFrom を参照）
       const returnQuery = query(
         collection(db, "sales"),
         where("type", "==", "return")
@@ -59,7 +55,6 @@ export default function ReturnsPage() {
         returnSnap.docs.map((doc) => doc.data().returnedFrom)
       );
 
-      // 3. すでに返品された sale.id を除外
       const unreturnedSales = saleData.filter(
         (sale) => !returnedIds.has(sale.id)
       );
@@ -72,51 +67,27 @@ export default function ReturnsPage() {
 
   const handleSelectSale = (sale: Sale) => {
     setSelectedSale(sale);
-    const initialQuantities: { [id: string]: number } = {};
-    sale.items.forEach((item) => {
-      initialQuantities[item.productId] = 0;
-    });
-    setReturnQuantities(initialQuantities);
-  };
-
-  const handleQuantityChange = (productId: string, value: number | null) => {
-    setReturnQuantities((prev) => ({
-      ...prev,
-      [productId]: value ?? 0,
-    }));
   };
 
   const handleReturn = async () => {
     if (!selectedSale) return;
 
-    const returnItems = selectedSale.items
-      .map((item) => {
-        const quantity = returnQuantities[item.productId];
-        return quantity > 0 ? { ...item, quantity: -quantity } : null;
-      })
-      .filter(Boolean) as Item[];
-
-    if (returnItems.length === 0) {
-      message.warning("返品する商品を選んでください");
-      return;
-    }
-
-    const total = returnItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+    const returnItems = selectedSale.items.map((item) => ({
+      ...item,
+      quantity: -item.quantity,
+    }));
 
     await addDoc(collection(db, "sales"), {
       type: "return",
       items: returnItems,
-      total,
+      total: -selectedSale.total,
       createdAt: Timestamp.now(),
       returnedFrom: selectedSale.id,
     });
 
     message.success("返品を記録しました");
     setSelectedSale(null);
-    setReturnQuantities({});
+    setSales((prev) => prev.filter((s) => s.id !== selectedSale.id));
   };
 
   return (
@@ -135,30 +106,27 @@ export default function ReturnsPage() {
                   .join(", ")}
               </p>
               <p>合計: ¥{sale.total}</p>
-              <Button onClick={() => handleSelectSale(sale)}>修正・返品処理</Button>
+              <Button onClick={() => handleSelectSale(sale)}>
+                返品する
+              </Button>
             </Card>
           ))}
         </div>
       ) : (
         <div>
-          <h2>商品ごとに返品数を指定</h2>
-          {selectedSale.items.map((item) => (
-            <Card key={item.productId} style={{ marginBottom: 12 }}>
-              <p>
-                {item.name} ¥{item.price} × {item.quantity}
-              </p>
-              <InputNumber
-                min={0}
-                max={item.quantity}
-                value={returnQuantities[item.productId]}
-                onChange={(value) =>
-                  handleQuantityChange(item.productId, value)
-                }
-              />
-            </Card>
-          ))}
+          <Card style={{ marginBottom: 16 }}>
+            <p>以下の会計を返品します：</p>
+            <p>日時: {selectedSale.createdAt.toDate().toLocaleString()}</p>
+            <p>
+              購入品目：
+              {selectedSale.items
+                .map((item) => `${item.name}×${item.quantity}`)
+                .join(", ")}
+            </p>
+            <p>合計: ¥{selectedSale.total}</p>
+          </Card>
           <Button type="primary" onClick={handleReturn}>
-            返品を記録する
+            この会計をまるごと返品する
           </Button>
           <Button
             onClick={() => setSelectedSale(null)}

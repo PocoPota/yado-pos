@@ -73,6 +73,7 @@ export default function CheckoutPage() {
         items,
         total,
         createdAt: Timestamp.now(),
+        type: "sale",
       });
 
       setLastSaleItems(items); // モーダルで表示するため保存
