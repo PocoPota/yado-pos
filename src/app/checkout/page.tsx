@@ -86,11 +86,18 @@ export default function CheckoutPage() {
         uid: currentUser.uid,
       });
 
+      const targetProductIds = ["oKYDsv2zRCFldMb5n2xw", "kzv4Npr47H4veRoHpEfS"];
+
+      const pubData = items
+        .filter(item => targetProductIds.includes(item.productId))
+        .map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        }));
+      
       await addDoc(collection(db, "pub_sales"), {
-        items,
-        total,
+        items: pubData,
         createdAt: Timestamp.now(),
-        type: "sale",
       });
 
       setLastSaleItems(items);

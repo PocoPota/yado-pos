@@ -95,13 +95,22 @@ export default function ReturnsPage() {
       uid: currentUser.uid,
     });
 
+    const targetProductIds = ["oKYDsv2zRCFldMb5n2xw", "kzv4Npr47H4veRoHpEfS"];
+
+    const filteredReturnItems = returnItems
+      .filter(item => targetProductIds.includes(item.productId))
+      .map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      }));
+    
+    const totalQuantity = filteredReturnItems.reduce((sum, item) => sum + item.quantity, 0);
+    
     await addDoc(collection(db, "pub_sales"), {
-      type: "return",
-      items: returnItems,
-      total: -selectedSale.total,
+      items: filteredReturnItems,
       createdAt: Timestamp.now(),
-      returnedFrom: selectedSale.id,
     });
+    
 
     message.success("返品を記録しました");
     setSelectedSale(null);
