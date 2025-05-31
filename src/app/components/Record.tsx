@@ -27,6 +27,7 @@ type Sale = {
   items: Item[];
   total: number;
   provided: boolean;
+  type: string;
 };
 
 export default function Dashboard() {
@@ -34,10 +35,9 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Firestoreのリアルタイムリスナーを設定
     const q = query(collection(db, "sales"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => {
+      const data = snapshot.docs.map((doc) => {
         const d = doc.data();
         return {
           id: doc.id,
@@ -45,6 +45,7 @@ export default function Dashboard() {
           items: d.items || [],
           total: d.total || 0,
           provided: d.provided || false,
+          type: d.type || "sale",
         };
       });
       setSales(data);
@@ -71,14 +72,17 @@ export default function Dashboard() {
     {
       title: "提供済み",
       key: "provided",
-      render: (_, record) => (
-        <Checkbox
-          checked={record.provided}
-          onChange={(e) =>
-            handleCheckboxChange(record, e.target.checked)
-          }
-        />
-      ),
+      render: (_, record) =>
+        record.type === "sale" ? (
+          <Checkbox
+            checked={record.provided}
+            onChange={(e) =>
+              handleCheckboxChange(record, e.target.checked)
+            }
+          />
+        ) : (
+          <span style={{ color: "#888" }}>—</span>
+        ),
     },
     {
       title: "購入日時",
