@@ -86,7 +86,7 @@ export default function CheckoutPage() {
         uid: currentUser.uid,
       });
 
-      const targetProductIds = ["oKYDsv2zRCFldMb5n2xw", "kzv4Npr47H4veRoHpEfS"];
+      const targetProductIds = ["oKYDsv2zRCFldMb5n2xw", "kzv4Npr47H4veRoHpEfS", "wjIleZW1iDymcwS3oVwq"];
 
       const pubData = items
         .filter(item => targetProductIds.includes(item.productId))
