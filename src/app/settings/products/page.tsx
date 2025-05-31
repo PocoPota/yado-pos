@@ -125,7 +125,6 @@ export default function ProductSettingsPage() {
       render: (_: any, record: Product) =>
         editingId === record.id ? (
           <InputNumber
-            min={0}
             defaultValue={record.price}
             onChange={(val) => (record.price = val ?? 0)}
           />
@@ -202,7 +201,7 @@ export default function ProductSettingsPage() {
             name="price"
             rules={[{ required: true, message: "価格を入力してください" }]}
           >
-            <InputNumber placeholder="価格" min={0} />
+            <InputNumber placeholder="価格" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
